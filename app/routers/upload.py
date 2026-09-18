@@ -4,6 +4,7 @@ import shutil
 import tempfile
 from datetime import datetime, timezone
 from fastapi import APIRouter, UploadFile, File, Form, Depends
+from fastapi.responses import JSONResponse
 
 from app.auth import require_admin
 from app.db import get_client, log_upload
@@ -50,18 +51,29 @@ def upload_report(
         tmp_path = tmp.name
 
     try:
-        rows = parse_fn(tmp_path)
-        client = get_client()
         try:
-            write_fn(client, report_month, rows)
-            recompute_aso_not_photographed(client, report_month)
-            log_upload(
-                client, report_type, file.filename, report_month,
-                len(rows), datetime.now(timezone.utc).isoformat(),
-            )
+            rows = parse_fn(tmp_path)
+            client = get_client()
+            try:
+                write_fn(client, report_month, rows)
+                recompute_aso_not_photographed(client, report_month)
+                log_upload(
+                    client, report_type, file.filename, report_month,
+                    len(rows), datetime.now(timezone.utc).isoformat(),
+                )
+            finally:
+                client.close()
         finally:
-            client.close()
-    finally:
-        os.remove(tmp_path)
+            # Best effort cleanup, ignored if the file is still briefly
+            # locked, so a cleanup failure never hides the real error above.
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
+    except Exception as e:
+        # Turns a parsing or database failure into a readable JSON error
+        # instead of a bare 500, most often caused by the selected report
+        # type not matching the uploaded file.
+        return JSONResponse(status_code=400, content={"error": str(e)})
 
     return {"status": "ok", "rows_processed": len(rows)}
