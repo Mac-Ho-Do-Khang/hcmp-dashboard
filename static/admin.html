@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCMP Dashboard - Admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="header">
+  <div><strong>Upload báo cáo</strong></div>
+  <a href="index.html">Xem dashboard</a>
+</div>
+
+<form class="admin-form" id="upload-form">
+  <label for="admin-token">Admin token</label>
+  <input type="password" id="admin-token" required>
+
+  <label for="report-type">Loại báo cáo</label>
+  <select id="report-type" required>
+    <option value="sales_report">Sales Daily Report (MTD_Theo Route)</option>
+    <option value="ai_photo_report">AI Photo Report (SummarybyRoute)</option>
+    <option value="raw_orders">Raw order line CSV</option>
+  </select>
+
+  <label for="report-month">Tháng, dạng YYYYMM, ví dụ 202608</label>
+  <input type="text" id="report-month" placeholder="202608" required>
+
+  <label for="report-file">File</label>
+  <input type="file" id="report-file" required>
+
+  <button type="submit">Upload</button>
+  <div class="admin-status" id="admin-status"></div>
+</form>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
