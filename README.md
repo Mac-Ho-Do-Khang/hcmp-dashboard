@@ -65,7 +65,7 @@ Turso keeps the SQLite database persisted between deploys, which a free hosting 
 2. Create a database, for example named `hcmp-dashboard`.
 3. Get the database URL, it looks like `libsql://hcmp-dashboard-yourname.turso.io`.
 4. Create an auth token for that database.
-5. Set `TURSO_DB_URL` and `TURSO_AUTH_TOKEN` to those two values, either in your local `.env` file or in your hosting provider's environment variable settings.
+5. Set `TURSO_DB_URL` and `TURSO_AUTH_TOKEN` to those two values, either in your local `.env` file or in your hosting provider's environment variable settings. Keep the URL in the `libsql://` form Turso gives you, `app/db.py` rewrites it to `https://` internally before connecting, so the traffic goes over plain HTTP instead of a websocket upgrade, which some hosts block or reset.
 
 No other code change is needed, `app/db.py` switches to Turso automatically once those two variables are set.
 

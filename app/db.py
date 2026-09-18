@@ -40,6 +40,16 @@ SCHEMA_STATEMENTS = [
 ]
 
 
+def _to_http_url(url):
+    # Turso gives out database URLs starting with libsql, which this
+    # client only connects to over websocket, and that handshake can be
+    # blocked on some hosts. Rewriting to https keeps the same database
+    # but uses the plain HTTP transport instead, which is more portable.
+    if url.startswith("libsql://"):
+        return "https://" + url[len("libsql://"):]
+    return url
+
+
 def get_client():
     # Builds a libsql client, pointed at Turso when its env vars are set
     # and at a local file otherwise, so the same code path works in both
@@ -47,7 +57,7 @@ def get_client():
     url = os.environ.get("TURSO_DB_URL") or LOCAL_DB_PATH
     token = os.environ.get("TURSO_AUTH_TOKEN") or None
     if token:
-        return libsql_client.create_client_sync(url=url, auth_token=token)
+        return libsql_client.create_client_sync(url=_to_http_url(url), auth_token=token)
     return libsql_client.create_client_sync(url=url)
 
 
