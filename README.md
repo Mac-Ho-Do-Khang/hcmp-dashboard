@@ -1,6 +1,6 @@
 # HCMP Dashboard
 
-A small FastAPI app that stores KPI values parsed from the daily sales report, the AI photo check report, and the raw order line export, and shows them as a web dashboard. One process serves both the API and the static frontend.
+A small FastAPI app that stores KPI values parsed from the daily sales report, the AI photo check report, the raw order line export, and the SPVB Shop install tracking workbook, and shows them as a web dashboard. One process serves both the API and the static frontend.
 
 ## How it works
 
@@ -82,16 +82,17 @@ The free tier spins the service down after about fifteen minutes without traffic
 
 ## Uploading a report
 
-On the admin page, pick the report type, type the month as `YYYYMM`, for example `202608`, choose the file, enter the admin token, and submit. The three report types currently supported are:
+On the admin page, pick the report type, type the month as `YYYYMM`, for example `202608`, choose the file, enter the admin token, and submit. The report types currently supported are:
 
 - Sales Daily Report, reading the `MTD_Theo Route` sheet.
 - AI Photo Report, reading the `SummarybyRoute` sheet.
 - The raw order line CSV export.
+- SPVB Shop Tracking, reading the `By Route` sheet of the xlsb workbook. This one is a xlsb binary file rather than xlsx, read with the pyxlsb library instead of openpyxl. This source has no separate route name column, so the route code is shown as its own label in the table.
 
 Re-uploading a report for a month that already has data replaces the previous values for that month and source rather than duplicating them.
 
 ## Known gaps
 
-- Only five KPIs are wired up so far, volume target, volume actual, ASO coverage, ASO photographed, and the derived ASO not photographed. Adding another KPI means adding its column position to `app/kpi_config.py`, reading it in the matching parser, and writing it in `app/kpi.py`.
+- Only seven KPIs are wired up so far, volume target, volume actual, ASO coverage, ASO photographed, the derived ASO not photographed, SPVB Shop target, and SPVB Shop installed. Adding another KPI means adding its column position to `app/kpi_config.py`, reading it in the matching parser, and writing it in `app/kpi.py`.
 - The `aso_coverage` column mapping is a best guess and needs confirmation, see the comment in `app/kpi_config.py`.
 - There is no way yet to browse or correct a bad upload from the admin page besides re-uploading the file.

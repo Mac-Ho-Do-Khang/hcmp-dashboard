@@ -46,6 +46,22 @@ def write_raw_orders_volume_kpi(client, report_month, rows):
         )
 
 
+def write_spvb_shop_route_kpis(client, report_month, rows):
+    # Stores the SPVB Shop install target and install count for every
+    # route. The route code is reused as the label since this source has
+    # no separate route name column.
+    now = _now()
+    for r in rows:
+        for kpi_name, value in [
+            ("spvb_shop_target", r["aso_target"]),
+            ("spvb_shop_installed", r["aso_installed"]),
+        ]:
+            upsert_kpi_snapshot(
+                client, report_month, kpi_name, "route", r["route_code"],
+                r["route_code"], value, "spvb_shop_tracking", now,
+            )
+
+
 def recompute_aso_not_photographed(client, report_month):
     # Derives ASO not yet photographed per route by subtracting
     # aso_photographed from aso_coverage for the same route and month, the

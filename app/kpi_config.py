@@ -41,3 +41,17 @@ RAW_ORDERS_COLUMNS = {
     "route_name": "Tên Route",
     "volume_actual": " Sản lượng thực giao",
 }
+
+# Row number where real data starts in the By Route sheet, everything
+# above this row is the header block, fixed by inspecting the file.
+SPVB_SHOP_ROUTE_DATA_START_ROW = 8
+
+# Column position, one based, of each field the SPVB Shop tracking parser
+# reads, fixed by inspecting the real By Route sheet header rows. This file
+# has no separate route name column, so the route code is reused as the label.
+SPVB_SHOP_ROUTE_COLUMNS = {
+    "area": 2,
+    "route_code": 5,
+    "aso_target": 10,     # column header is "#ASO co Chi tieu ... - sau Mien Tru", the target after exemptions
+    "aso_installed": 11,  # column header is "#ASO da cai dat", ASO that already have SPVB Shop installed
+}

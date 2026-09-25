@@ -8,6 +8,8 @@ const TABLE_COLUMNS = [
   { key: "aso_coverage", label: "ASO Coverage" },
   { key: "aso_photographed", label: "ASO Photographed" },
   { key: "aso_not_photographed", label: "ASO Not Photographed" },
+  { key: "spvb_shop_target", label: "SPVB Shop Target" },
+  { key: "spvb_shop_installed", label: "SPVB Shop Installed" },
 ];
 
 async function loadMonths() {
@@ -52,6 +54,7 @@ async function loadDashboard(month) {
   html += kpiCard("Volume Actual", sumColumn(routes, "volume_actual"));
   html += kpiCard("ASO Coverage", sumColumn(routes, "aso_coverage"));
   html += kpiCard("ASO Not Photographed", sumColumn(routes, "aso_not_photographed"));
+  html += kpiCard("SPVB Shop Installed", sumColumn(routes, "spvb_shop_installed"));
   html += "</div>";
 
   html += '<div class="section-table"><table><thead><tr>';

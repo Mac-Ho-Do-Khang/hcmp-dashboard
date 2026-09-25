@@ -11,10 +11,12 @@ from app.db import get_client, log_upload
 from app.parsers.sales_report import parse_sales_route_kpis
 from app.parsers.ai_photo_report import parse_ai_photo_route_kpis
 from app.parsers.raw_orders import parse_raw_orders_volume
+from app.parsers.spvb_shop_report import parse_spvb_shop_route_kpis
 from app.kpi import (
     write_sales_route_kpis,
     write_ai_photo_route_kpis,
     write_raw_orders_volume_kpi,
+    write_spvb_shop_route_kpis,
     recompute_aso_not_photographed,
 )
 
@@ -26,6 +28,7 @@ REPORT_HANDLERS = {
     "sales_report": (parse_sales_route_kpis, write_sales_route_kpis),
     "ai_photo_report": (parse_ai_photo_route_kpis, write_ai_photo_route_kpis),
     "raw_orders": (parse_raw_orders_volume, write_raw_orders_volume_kpi),
+    "spvb_shop_tracking": (parse_spvb_shop_route_kpis, write_spvb_shop_route_kpis),
 }
 
 
